@@ -1,4 +1,4 @@
-Project to link surfaces from BrainVisa to MNE
+BV2MNE creates source models readable by MNE using cortical meshes generated using BrainVISA (MarsAtlas) and subcortical structures from Freesurfer.
 
 Installation:
 -------------
