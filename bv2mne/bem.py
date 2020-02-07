@@ -3,11 +3,18 @@
 
 import mne
 
-from bv2mne.directories import *
+import os.path as op
 
-def create_bem(subject):
+from bv2mne.directories import read_directories, read_databases
+
+def create_bem(json_fname, subject):
 
     print('\n---------- Resolving BEM model and BEM soultion ----------\n')
+
+
+    database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
+
+    raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
 
     fname_bem_model = op.join(bem_dir.format(subject), '{0}-bem-model.fif'.format(subject))
     fname_bem_sol = op.join(bem_dir.format(subject), '{0}-bem-sol.fif'.format(subject))
@@ -22,7 +29,9 @@ def create_bem(subject):
 
     return
 
-def check_bem(subject):
+def check_bem(json_fname, subject):
+
+    raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
 
     # Check if BEM files exists, return boolean value
     print('\nChecking BEM files\n')

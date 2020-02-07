@@ -15,26 +15,28 @@ def setup_db_coords(database_name, project_name, overwrite=True):
         not op.exists(op.join(database_name, 'db_freesurfer', project_name))):
         warnings.warn('Project not detected in one ore more databases, please check')
 
-    save_dir = op.abspath(__file__).replace('config.py', '')
+    #save_dir = op.abspath(__file__).replace('config.py', '')
     coords = {'db_name': database_name,
               'p_name': project_name}
 
-    if op.exists(op.join(save_dir, 'db_coords.json')):
+    json_fname = op.join(database_name, 'db_coords.json')
+    if op.exists(json_fname):
         if not overwrite: raise ValueError('Coordinate file exist, to change the values set \'overwrite=True\'')
         else:
-            with open(op.join(save_dir, 'db_coords.json'), 'w') as cf:
+            with open(json_fname, 'w') as cf:
                 json.dump(coords, cf)
     else:
-        with open(op.join(save_dir, 'db_coords.json'), 'w') as cf:
+        with open(json_fname, 'w') as cf:
             json.dump(coords, cf)
 
-    print('Database coordinates saved in {0}'.format(op.join(save_dir, 'db_coords.json')))
-    return
+    print('Database coordinates saved in {0}'.format(json_fname))
+    return json_fname
 
 
-def read_db_coords():
-    read_dir = op.abspath(__file__).replace('config.py', '')
-    json_fname = op.join(read_dir, 'db_coords.json')
+def read_db_coords(json_fname):
+
+    #read_dir = op.abspath(__file__).replace('config.py', '')
+    #json_fname = op.join(read_dir, 'db_coords.json')
 
     if op.exists(json_fname):
         print('Loading database coordinates...')

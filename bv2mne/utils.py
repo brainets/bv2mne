@@ -42,9 +42,9 @@ def create_trans(subject, database, fname, fname_out):
                 print("error, {} is not an existing path, will try to add \
                       subject_dir {}".format(format_name, database))
 
-                name = os.path.join(database, format_name)
-                print(name)
-                assert os.path.exists(name), "Breaking, even when add \
+                format_name = os.path.join(database, format_name)
+                print(format_name)
+                assert os.path.exists(format_name), "Breaking, even when add \
                     subject_dir, file {} do not exists".format(name)
 
             with open(format_name, 'r') as matfile:
