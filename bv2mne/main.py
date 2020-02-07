@@ -1,7 +1,7 @@
 import os.path as op
 from bv2mne.config.config import setup_db_coords
 # setup_db_coords(op.join('D:\\', 'Databases', 'toy_db'), 'meg_causal', overwrite=True)
-setup_db_coords(op.join('G:\\', 'data'), 'meg_causal', overwrite=True)
+# setup_db_coords(op.join('G:\\', 'data'), 'meg_causal', overwrite=True)
 
 from bv2mne.source import create_source_models
 from bv2mne.forward import create_forward_models

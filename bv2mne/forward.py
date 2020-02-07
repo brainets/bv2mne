@@ -7,6 +7,24 @@ from bv2mne.directories import *
 from bv2mne.bem import check_bem, create_bem
 
 def create_forward_models(subject, session=1, event='', src=None):
+    """ Create the forward model
+
+    Parameters:
+    ----------
+    subject : str
+        Name of the subject
+    session : int | str
+         Number of the session
+    event : str
+        Name of the event of the epoch file
+    src : str | None, default None
+        Path of the sources file, if None the 'src.fif' file is automatically searched
+
+    Returns:
+    -------
+        forward models : list of forward models
+    -------
+    """
 
     # File to align coordinate frames meg2mri computed using mne.analyze
     # (computed with interactive gui)

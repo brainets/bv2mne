@@ -7,10 +7,10 @@ from bv2mne.config.config import read_db_coords
 database, project = read_db_coords()
 
 # Coordinates for raw files
-db_raw = op.join('/', 'envau', 'work', 'bagamore', 'brovelli.a', 'Data', 'Neurophy', 'MEG_CausaL')
-fname_bti = 'c,rfDC'
-fname_config = 'config'
-fname_hs = 'hs_file'
+# db_raw = op.join('/', 'envau', 'work', 'bagamore', 'brovelli.a', 'Data', 'Neurophy', 'MEG_CausaL')
+# fname_bti = 'c,rfDC'
+# fname_config = 'config'
+# fname_hs = 'hs_file'
 
 # Coordinates for database
 db_mne = op.join(database, 'db_mne')
