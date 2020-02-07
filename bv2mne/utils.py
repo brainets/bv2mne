@@ -95,11 +95,12 @@ def compute_trans(pos, trans):
     pos = pos.copy()
     if isinstance(trans, str):
         if trans.endswith('fif'):
-            trans = read_trans(trans)
-        with open(trans, 'r') as matfile:
-            lines = matfile.read().strip().split("\n")
-            trans = [l.split() for l in lines]
-            trans = np.array(trans).astype(np.float)
+            trans = read_trans(trans)['trans']
+        else:
+            with open(trans, 'r') as matfile:
+                lines = matfile.read().strip().split("\n")
+                trans = [l.split() for l in lines]
+                trans = np.array(trans).astype(np.float)
 
     pos = apply_affine(trans, pos)
     return pos
@@ -270,15 +271,3 @@ def compute_mean_centroids(vertex_pos, cluster_labels):
     print(centroids.shape)
 
     return centroids
-
-def apply_artifact_rejection(epochs, sbj, sn, ev, reject='both'):
-    if reject == 'both' or reject == 'channels':
-        d = np.load(op.join(prep_dir.format(sbj, sn), 'channels_rejection.npz'), allow_pickle=True)
-        ar = d['ar']
-        epochs.drop_channels(list(ar))
-    if reject == 'both' or reject == 'trials':
-        d = np.load(op.join(prep_dir.format(sbj, sn), 'trials_rejection_{0}.npz'.format(ev)), allow_pickle=True)
-        ar = d['ar']
-        epochs.drop(ar)
-        epochs.drop_bad()
-    return epochs

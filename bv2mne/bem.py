@@ -13,7 +13,7 @@ def create_bem(subject):
     fname_bem_sol = op.join(bem_dir.format(subject), '{0}-bem-sol.fif'.format(subject))
 
     # Make bem model: single-shell model. Depends on anatomy only.
-    model = mne.make_bem_model(subject, ico=None, conductivity=[0.3], subjects_dir=op.join(db_mne, project))
+    model = mne.make_bem_model(subject, ico=None, conductivity=[0.3], subjects_dir=op.join(db_fs, project))
     mne.write_bem_surfaces(fname_bem_model, model)
 
     # Make bem solution. Depends on anatomy only.
@@ -32,3 +32,6 @@ def check_bem(subject):
     if op.isfile(fname_bem_model) and op.isfile(fname_bem_sol):
         return True
     else: return False
+
+if __name__ == '__main__':
+    create_bem('subject_03')

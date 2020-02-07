@@ -160,7 +160,7 @@ def visualize_objects(subject, bem, sources, brain, color='marsatlas'):
 
 if __name__ == '__main__':
     # visualize_cortical_src('subject_02', hemi='both', color='marsatlas', preview=True)
-    visualize_objects('subject_04', bem=True, sources=True, brain=True, color='marsatlas')
+    visualize_objects('subject_18', bem=True, sources=True, brain=True, color='marsatlas')
 
     # src = visualize_cortical_src('subject_02', hemi='both', color='red', preview=False)
     # src.animate()

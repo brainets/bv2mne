@@ -15,13 +15,14 @@ from bv2mne.bem import check_bem, create_bem
 
 
 def create_source_models(subject, database=database, save=False):
-    """Create cortical and subcortical source models
+    """
+    Create cortical and subcortical source models
 
     Pipeline for:
         i) importing BrainVISA white meshes for positions
         and MarsAtlas textures for areas
         ii) create transformation file from BV to head coordinates
-        iii) create source spaces src with cortical
+        iii) create source spaces with cortical
         and subcortical dipoles,
 
     Parameters
@@ -96,7 +97,7 @@ def create_source_models(subject, database=database, save=False):
     create_trans(subject, database, fname_trans_ref, fname_trans_out)
 
     # Calculate cortical sources and MarsAtlas labels
-    print('\n---------- Cortical soures ----------\n')
+    print('\n---------- Cortical sources ----------\n')
     surf_src, surf_labels = get_brain_surf_sources(subject, fname_surf_L, fname_surf_R, fname_tex_L, fname_tex_R, None,
                                                   fname_trans_out, fname_atlas, fname_color)
 
@@ -113,7 +114,7 @@ def create_source_models(subject, database=database, save=False):
         pass
     else: create_bem(subject)
 
-    print('\n---------- Subcortical soures ----------\n')
+    print('\n---------- Subcortical sources ----------\n')
 
     vol_src, vol_labels = get_brain_vol_sources(subject, fname_vol, name_lobe_vol, fname_trans_out, fname_atlas, space=5.)
 
@@ -177,7 +178,7 @@ def get_brain_surf_sources(subject, fname_surf_L=None, fname_surf_R=None,
             # Create surface areas
             surface = get_surface(hemi_surf, subject=subject, hemi=hemi, trans=trans)
             labels_hemi = get_surface_labels(surface, texture=hemi_tex, hemi=hemi, subject=subject,
-                                           fname_atlas=fname_atlas, fname_color=fname_color)
+                                             fname_atlas=fname_atlas, fname_color=fname_color)
 
             # Delete WM (values of texture 0 and 42)
             bad_areas = [0, 42]
