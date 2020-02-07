@@ -14,6 +14,25 @@ def create_forward_models(json_fname, subject, session=1, event='', src=None):
     database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
     raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
 
+    """ Create the forward model
+
+    Parameters:
+    ----------
+    subject : str
+        Name of the subject
+    session : int | str
+         Number of the session
+    event : str
+        Name of the event of the epoch file
+    src : str | None, default None
+        Path of the sources file, if None the 'src.fif' file is automatically searched
+
+    Returns:
+    -------
+        forward models : list of forward models
+    -------
+    """
+
     # File to align coordinate frames meg2mri computed using mne.analyze
     # (computed with interactive gui)
     fname_trans = op.join(trans_dir.format(subject), '{0}-trans.fif'.format(subject))

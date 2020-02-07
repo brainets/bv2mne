@@ -4,7 +4,6 @@ import shutil
 from bv2mne.config.config import read_db_coords
 
 # Defining database coordinates
-
 def read_databases(json_fname):
     database, project = read_db_coords(json_fname)
 

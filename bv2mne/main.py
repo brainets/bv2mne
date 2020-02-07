@@ -1,7 +1,6 @@
 import os.path as op
 import argparse
 from bv2mne.config.config import setup_db_coords
-# setup_db_coords(op.join('D:\\', 'Databases', 'toy_db'), 'meg_causal', overwrite=True)
 from bv2mne.directories import create_sbj_db_mne
 
 def create_main(data, project, subjects, ses, event, json):
