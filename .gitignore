@@ -1,1 +1,6 @@
 bv2mne/config/db_coords.json
+.idea/
+bv2mne/__pycache__/
+bv2mne/config/__pycache__/
+bv2mne/tests/__pycache__/
+*/__pycache__/
