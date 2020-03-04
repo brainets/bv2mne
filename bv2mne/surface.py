@@ -8,7 +8,7 @@ from mne.io.constants import FIFF
 
 from nibabel import gifti
 
-from bv2mne.utils import  compute_trans, read_texture_info, tranform
+from bv2mne.utils import  compute_trans, read_texture_info#
 
 
 def get_surface(fname, subject, hemi, trans=None):
