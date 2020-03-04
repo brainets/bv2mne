@@ -4,30 +4,42 @@ import shutil
 from bv2mne.config.config import read_db_coords
 
 # Defining database coordinates
-database, project = read_db_coords()
+def read_databases(json_fname):
+    database, project = read_db_coords(json_fname)
 
-# Coordinates for raw files
-db_raw = op.join('/', 'envau', 'work', 'bagamore', 'brovelli.a', 'Data', 'Neurophy', 'MEG_CausaL')
-fname_bti = 'c,rfDC'
-fname_config = 'config'
-fname_hs = 'hs_file'
+    ## Coordinates for raw files
+    #db_raw = op.join('/', 'envau', 'work', 'bagamore', 'brovelli.a', 'Data', 'Neurophy', 'MEG_CausaL')
+    #fname_bti = 'c,rfDC'
+    #fname_config = 'config'
+    #fname_hs = 'hs_file'
 
-# Coordinates for database
-db_mne = op.join(database, 'db_mne')
-db_bv = op.join(database, 'db_brainvisa')
-db_fs = op.join(database, 'db_freesurfer')
+    # Coordinates for database
+    db_mne = op.join(database, 'db_mne')
+    db_bv = op.join(database, 'db_brainvisa')
+    db_fs = op.join(database, 'db_freesurfer')
 
-# mne database subdirectories
-raw_dir = op.join(db_mne, project, '{0}', 'raw', '{1}')
-prep_dir = op.join(db_mne, project, '{0}', 'prep', '{1}')
-trans_dir = op.join(db_mne, project, '{0}', 'trans')
-mri_dir = op.join(db_mne, project, '{0}', 'mri')
-src_dir = op.join(db_mne, project, '{0}', 'src')
-bem_dir = op.join(db_mne, project, '{0}', 'bem')
-fwd_dir = op.join(db_mne, project, '{0}', 'fwd')
-hga_dir = op.join(db_mne, project, '{0}', 'hga', '{1}')
+    return database, project, db_mne, db_bv, db_fs
 
-def create_sbj_db_mne(subject):
+def read_directories(json_fname):
+
+    database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
+
+    # mne database subdirectories
+    raw_dir = op.join(db_mne, project, '{0}', 'raw', '{1}')
+    prep_dir = op.join(db_mne, project, '{0}', 'prep', '{1}')
+    trans_dir = op.join(db_mne, project, '{0}', 'trans')
+    mri_dir = op.join(db_mne, project, '{0}', 'mri')
+    src_dir = op.join(db_mne, project, '{0}', 'src')
+    bem_dir = op.join(db_mne, project, '{0}', 'bem')
+    fwd_dir = op.join(db_mne, project, '{0}', 'fwd')
+    hga_dir = op.join(db_mne, project, '{0}', 'hga', '{1}')
+
+    return raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir
+
+def create_sbj_db_mne(json_fname, subject):
+
+    database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
+
     # Create MNE database
     if not op.exists(db_mne):
         os.mkdir(db_mne)
