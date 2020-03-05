@@ -12,7 +12,7 @@ from bv2mne.utils import  compute_trans, read_texture_info#
 
 
 def get_surface(fname, subject, hemi, trans=None):
-    """get surface whith a file
+    """ Get surface whith a file
 
     Parameters
     ----------
@@ -27,9 +27,8 @@ def get_surface(fname, subject, hemi, trans=None):
 
     Returns
     -------
-    surface : instance of Surface
-    -------
-    Author : Alexandre Fabre
+    surface : instance of mne.SourceSpace ?
+        Surface source space
     """
 
     try:
@@ -70,6 +69,7 @@ def get_surface(fname, subject, hemi, trans=None):
 
     return surface
 
+
 def get_surface_labels(surface, texture, subject='S4', hemi='lh',
                       fname_atlas=None, fname_color=None):
     """get areas on the surface
@@ -90,9 +90,8 @@ def get_surface_labels(surface, texture, subject='S4', hemi='lh',
 
     Returns
     -------
-    areas : list of Surface object
-    -------
-    Author : Alexandre Fabre
+    labels : instance of mne.Labels
+        MarsAtlas labels for surface sources
     """
 
     labels = []
@@ -177,17 +176,17 @@ def get_surface_labels(surface, texture, subject='S4', hemi='lh',
     return labels
 
 
-def reject_bad_areas(surface, labels, bad):
-
-    # Detect bad areas and the relative vertices
-    bad_labels = []
-    bad_vertex = []
-    for b in bad:
-        for n, l in enumerate(labels):
-            if l.name == b:
-                bad_labels.append(n)
-                bad_vertex.append(l.vertices)
-
-    # Delete bad labels
-    labels = list(np.delete(labels, bad_labels, axis=0))
+# def reject_bad_areas(surface, labels, bad):
+#
+#     # Detect bad areas and the relative vertices
+#     bad_labels = []
+#     bad_vertex = []
+#     for b in bad:
+#         for n, l in enumerate(labels):
+#             if l.name == b:
+#                 bad_labels.append(n)
+#                 bad_vertex.append(l.vertices)
+#
+#     # Delete bad labels
+#     labels = list(np.delete(labels, bad_labels, axis=0))
 

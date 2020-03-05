@@ -1,4 +1,5 @@
 from bv2mne.directories import read_directories
+import os.path as op
 import numpy as np
 import mne
 from visbrain.objects import *
@@ -62,7 +63,14 @@ def visualize_brain(src_dir, subject, hemi='both', translucent=False, preview=Tr
     return im_brain
 
 
-def set_marsatlas(subject, src, hemi='both'):
+def set_marsatlas(subject, src, hemi='both', json_fname='default'):
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
+
+    raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
+
     read_dir = op.abspath(__file__).replace('vis.py', 'textures')
     cortical_text = np.load(op.join(read_dir, 'cortical.npy'))
     subcort_text = np.load(op.join(read_dir, 'subcortical.npy'))
@@ -110,7 +118,11 @@ def set_marsatlas(subject, src, hemi='both'):
 
     return rgb_marsatlas
 
-def visualize_objects(json_fname, subject, bem, sources, brain, color='marsatlas'):
+def visualize_objects(subject, bem, sources, brain, color='marsatlas', json_fname='default'):
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
 
     raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
 

@@ -4,7 +4,12 @@ import shutil
 from bv2mne.config.config import read_db_coords
 
 # Defining database coordinates
-def read_databases(json_fname):
+def read_databases(json_fname='default'):
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
+
     database, project = read_db_coords(json_fname)
 
     ## Coordinates for raw files
@@ -20,7 +25,11 @@ def read_databases(json_fname):
 
     return database, project, db_mne, db_bv, db_fs
 
-def read_directories(json_fname):
+def read_directories(json_fname='default'):
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
 
     database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
 
@@ -36,7 +45,11 @@ def read_directories(json_fname):
 
     return raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir
 
-def create_sbj_db_mne(json_fname, subject):
+def create_sbj_db_mne(subject, json_fname='default'):
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
 
     database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
 

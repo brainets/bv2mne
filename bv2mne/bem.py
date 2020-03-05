@@ -45,7 +45,6 @@ def create_bem(json_fname, subject):
     return bem_model, bem_sol
 
 def check_bem(json_fname, subject):
-
     """ Check if the BEM model exists
 
     Parameters
