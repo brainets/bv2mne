@@ -10,6 +10,11 @@ Welcome to bv2mne's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   bv2mne/config/config
+   bv2mne/bem
+   bv2mne/forward
+   bv2mne/source
+   bv2mne/surface
 
 
 Indices and tables
