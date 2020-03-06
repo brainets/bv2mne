@@ -1,3 +1,4 @@
+bv2mne/frioul_batch/*
 bv2mne/config/db_coords.json
 .idea/
 bv2mne/__pycache__/

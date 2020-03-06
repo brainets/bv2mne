@@ -1,4 +1,5 @@
-from bv2mne.directories import *
+from bv2mne.directories import read_directories
+import os.path as op
 import numpy as np
 import mne
 from visbrain.objects import *
@@ -6,7 +7,7 @@ from visbrain.objects import *
 
 # def visualize_objects(subject, brain=True, bem=False, surf_src=False)
 
-def visualize_bem(subject, vis_as='src', color='green', preview=True):
+def visualize_bem(bem_dir, subject, vis_as='src', color='green', preview=True):
     bem = mne.read_bem_surfaces(op.join(bem_dir.format(subject), '{0}-bem-model.fif'.format(subject)))
     if vis_as == 'src':
         im_bem = SourceObj('bem', bem[0]['rr'], color=color, alpha=1., symbol='diamond', radius_min=3.)
@@ -19,7 +20,7 @@ def visualize_bem(subject, vis_as='src', color='green', preview=True):
     return im_bem
 
 
-def visualize_cortical_src(subject, hemi='both', color='marsatlas', preview=True):
+def visualize_cortical_src(src_dir, subject, hemi='both', color='marsatlas', preview=True):
     src = mne.read_source_spaces(op.join(src_dir.format(subject), '{0}_surf-src.fif'.format(subject)))
     if hemi == 'both':
         rr = np.vstack((src[0]['rr'], src[1]['rr']))
@@ -39,7 +40,7 @@ def visualize_cortical_src(subject, hemi='both', color='marsatlas', preview=True
     return im_cort_src
 
 
-def visualize_brain(subject, hemi='both', translucent=False, preview=True):
+def visualize_brain(src_dir, subject, hemi='both', translucent=False, preview=True):
     src = mne.read_source_spaces(op.join(src_dir.format(subject), '{0}_surf-src.fif'.format(subject)))
     if hemi == 'both':
         rr = np.vstack((src[0]['rr'], src[1]['rr']))
@@ -62,7 +63,14 @@ def visualize_brain(subject, hemi='both', translucent=False, preview=True):
     return im_brain
 
 
-def set_marsatlas(subject, src, hemi='both'):
+def set_marsatlas(subject, src, hemi='both', json_fname='default'):
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
+
+    raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
+
     read_dir = op.abspath(__file__).replace('vis.py', 'textures')
     cortical_text = np.load(op.join(read_dir, 'cortical.npy'))
     subcort_text = np.load(op.join(read_dir, 'subcortical.npy'))
@@ -110,17 +118,24 @@ def set_marsatlas(subject, src, hemi='both'):
 
     return rgb_marsatlas
 
-def visualize_objects(subject, bem, sources, brain, color='marsatlas'):
+def visualize_objects(subject, bem, sources, brain, color='marsatlas', json_fname='default'):
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
+
+    raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
+
     so = SceneObj()
     im_objects = []
     if bem == True:
-        im_bem = visualize_bem(subject, vis_as='src', color='green', preview=False)
+        im_bem = visualize_bem(bem_dir, subject, vis_as='src', color='green', preview=False)
         im_objects.append(im_bem)
     if brain == True:
-        im_brain = visualize_brain(subject, hemi='both', translucent=True, preview=False)
+        im_brain = visualize_brain(src_dir, subject, hemi='both', translucent=True, preview=False)
         im_objects.append(im_brain)
     if sources == True:
-        im_cort_src = visualize_cortical_src(subject, hemi='both', color=color, preview=False)
+        im_cort_src = visualize_cortical_src(src_dir, subject, hemi='both', color=color, preview=False)
         im_objects.append(im_cort_src)
 
     for im in im_objects:
@@ -160,7 +175,8 @@ def visualize_objects(subject, bem, sources, brain, color='marsatlas'):
 
 if __name__ == '__main__':
     # visualize_cortical_src('subject_02', hemi='both', color='marsatlas', preview=True)
-    visualize_objects('subject_18', bem=True, sources=True, brain=True, color='marsatlas')
+    json_fname = ""
+    visualize_objects(json_fname, 'subject_18', bem=True, sources=True, brain=True, color='marsatlas')
 
     # src = visualize_cortical_src('subject_02', hemi='both', color='red', preview=False)
     # src.animate()

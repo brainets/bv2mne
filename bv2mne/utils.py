@@ -8,7 +8,7 @@ from numpy.linalg import inv
 from nibabel.affines import apply_affine
 
 from mne.transforms import write_trans, read_trans
-from vispy.visuals.transforms import MatrixTransform
+# from vispy.visuals.transforms import MatrixTransform
 
 from bv2mne.directories import *
 
@@ -42,9 +42,9 @@ def create_trans(subject, database, fname, fname_out):
                 print("error, {} is not an existing path, will try to add \
                       subject_dir {}".format(format_name, database))
 
-                name = os.path.join(database, format_name)
-                print(name)
-                assert os.path.exists(name), "Breaking, even when add \
+                format_name = os.path.join(database, format_name)
+                print(format_name)
+                assert os.path.exists(format_name), "Breaking, even when add \
                     subject_dir, file {} do not exists".format(name)
 
             with open(format_name, 'r') as matfile:
@@ -106,21 +106,21 @@ def compute_trans(pos, trans):
     return pos
 
 
-def tranform(pos, trans):
-    pos = pos.copy()
-    if isinstance(trans, str):
-        if trans.endswith('fif'):
-            trans = mne.read_trans(trans)
-            trans = trans['trans']
-        else:
-            with open(trans, 'r') as matfile:
-                lines = matfile.read().strip().split("\n")
-                trans = [l.split() for l in lines]
-                trans = np.array(trans).astype(np.float)
-
-    mt = MatrixTransform(trans)
-    pos = mt.map(pos)[:, 0:-1]
-    return pos
+# def tranform(pos, trans):
+#     pos = pos.copy()
+#     if isinstance(trans, str):
+#         if trans.endswith('fif'):
+#             trans = mne.read_trans(trans)
+#             trans = trans['trans']
+#         else:
+#             with open(trans, 'r') as matfile:
+#                 lines = matfile.read().strip().split("\n")
+#                 trans = [l.split() for l in lines]
+#                 trans = np.array(trans).astype(np.float)
+#
+#     mt = MatrixTransform(trans)
+#     pos = mt.map(pos)[:, 0:-1]
+#     return pos
 
 
 def read_texture_info(filename, hemi):

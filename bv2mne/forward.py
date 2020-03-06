@@ -3,10 +3,13 @@
 
 import mne
 
-from bv2mne.directories import *
+import os
+import os.path as op
+
+from bv2mne.directories import read_databases, read_directories
 from bv2mne.bem import check_bem, create_bem
 
-def create_forward_models(subject, session=1, event='', src=None):
+def create_forward_models(subject, session=1, event='', src=None, json_fname='default'):
     """ Create the forward model
 
     Parameters:
@@ -22,9 +25,17 @@ def create_forward_models(subject, session=1, event='', src=None):
 
     Returns:
     -------
-        forward models : list of forward models
+        forward models : list
+            List of forward models
     -------
     """
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
+
+    # database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
+    raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
 
     # File to align coordinate frames meg2mri computed using mne.analyze
     # (computed with interactive gui)
@@ -69,7 +80,7 @@ def create_forward_models(subject, session=1, event='', src=None):
             name = 'vol'
         else: raise ValueError('Unknown Source Space type, it should be \'surf\' or \'vol\'')
 
-        fwd = forward_model(subject, info, fname_trans, sp, force_fixed=f_fixed, name=name)
+        fwd = forward_model(subject, info, fname_trans, sp, force_fixed=f_fixed, name=name, json_fname=json_fname)
         fwds.append(fwd)
 
     print('\n---------- Forward Models Completed ----------\n')
@@ -77,8 +88,8 @@ def create_forward_models(subject, session=1, event='', src=None):
     return fwds
 
 
-def forward_model(subject, info, fname_trans, src, force_fixed=False, name='model'):
-    """construct forward model
+def forward_model(subject, info, fname_trans, src, force_fixed=False, name='model', json_fname='default'):
+    """  Compute forward model
 
     Parameters
     ----------
@@ -99,17 +110,24 @@ def forward_model(subject, info, fname_trans, src, force_fixed=False, name='mode
 
     Returns
     -------
-    fwd : instance of Forward
+    fwd : instance of mne.Forward
+        Forward model
     -------
     """
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
+
+    raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
+
     # Files to save
     fname_bem_sol = op.join(bem_dir.format(subject), '{0}-bem-sol.fif'.format(subject))
     fname_fwd = op.join(fwd_dir.format(subject), '{0}-{1}-fwd.fif'.format(subject, name))
 
     # Making BEM model and BEM solution if it was not done before
-    if check_bem(subject):
-        pass
-    else: create_bem(subject)
+    if not check_bem(json_fname, subject):
+        create_bem(json_fname, subject)
 
     # Compute forward, commonly referred to as the gain or leadfield matrix.
     fwd = mne.make_forward_solution(info=info, trans=fname_trans, src=src, bem=fname_bem_sol, mindist=0.0)

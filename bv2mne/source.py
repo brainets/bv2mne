@@ -1,12 +1,13 @@
 # Authors: David Meunier <david.meunier@univ-amu.fr>
 #          Ruggero Basanisi <ruggero.basanisi@gmail.com>
 
+import os.path as op
 import numpy as np
 
 import mne
 from mne import SourceSpaces
 
-from bv2mne.directories import *
+from bv2mne.directories import read_databases, read_directories
 
 from bv2mne.surface import get_surface, get_surface_labels
 from bv2mne.volume import get_volume, get_volume_labels
@@ -14,9 +15,8 @@ from bv2mne.utils import create_trans
 from bv2mne.bem import check_bem, create_bem
 
 
-def create_source_models(subject, database=database, save=False):
-    """
-    Create cortical and subcortical source models
+def create_source_models(subject, save=False, json_fname='default'):
+    """ Create cortical and subcortical source models
 
     Pipeline for:
         i) importing BrainVISA white meshes for positions
@@ -45,6 +45,13 @@ def create_source_models(subject, database=database, save=False):
     vol_labels : instance of Labels
         Subcortical volumes Labels
     """
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
+
+    database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
+    raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
 
     ###########################################################################
     # -------------------------------------------------------------------------
@@ -110,13 +117,12 @@ def create_source_models(subject, database=database, save=False):
 
     # Create BEM model if needed
     print('\nBEM model is needed for volume source space\n')
-    if check_bem(subject):
-        pass
-    else: create_bem(subject)
+    if not check_bem(json_fname, subject):
+        create_bem(json_fname, subject)
 
     print('\n---------- Subcortical sources ----------\n')
 
-    vol_src, vol_labels = get_brain_vol_sources(subject, fname_vol, name_lobe_vol, fname_trans_out, fname_atlas, space=5.)
+    vol_src, vol_labels = get_brain_vol_sources(subject, fname_vol, json_fname, name_lobe_vol, fname_trans_out, fname_atlas, space=5.)
 
     if save == True:
         print('Saving volume source space and labels.....')
@@ -157,7 +163,10 @@ def get_brain_surf_sources(subject, fname_surf_L=None, fname_surf_R=None,
         The filename of color atlas
     Returns
     -------
-    figure : Figure object
+    surf_src : instance of mne.SourceSpace
+        Surface source space
+    surf_labels : instace of mne.Labels
+        Surface MarsAtlas labels
     -------
     """
 
@@ -205,9 +214,10 @@ def get_brain_surf_sources(subject, fname_surf_L=None, fname_surf_R=None,
     return surf_src, surf_labels
 
 
-def get_brain_vol_sources(subject, fname_vol=None, name_lobe_vol='Subcortical',
+def get_brain_vol_sources(subject, fname_vol=None, json_fname='default', name_lobe_vol='Subcortical',
                           trans=False, fname_atlas=None, space=5):
-    """compute volume sources
+    """ Compute volume sources
+
     Parameters
     ----------
     subject : str
@@ -222,15 +232,22 @@ def get_brain_vol_sources(subject, fname_vol=None, name_lobe_vol='Subcortical',
         The filename of the area atlas
     Returns
     -------
-    figure : Figure object
+    vol_src : instance of mne.VolSourceSpace
+        Volumetric source space of subcortical
+    vol_labels: instance of mne.Labels
+        Subcortical MarsAtlas labels
     -------
     """
+
+    if json_fname == 'default':
+        read_dir = op.join(op.abspath(__package__), 'config')
+        json_fname = op.join(read_dir, 'db_coords.json')
 
     print('build volume areas')
 
     assert fname_vol is not None, "error , missing volume file"
 
-    vol_src = get_volume(subject, pos=5.0)
+    vol_src = get_volume(subject, pos=5.0, json_fname=json_fname)
     vol_labels = get_volume_labels(vol_src)
 
     labels_sum = []
