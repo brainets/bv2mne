@@ -1,24 +1,18 @@
 import os
 import os.path as op
 import shutil
-from bv2mne.config.config import read_db_coords
+from bv2mne.config.config import read_db_info
 
 # Defining database coordinates
 def read_databases(json_fname='default'):
 
     if json_fname == 'default':
         read_dir = op.join(op.abspath(__package__), 'config')
-        json_fname = op.join(read_dir, 'db_coords.json')
+        json_fname = op.join(read_dir, 'db_info.json')
 
-    database, project = read_db_coords(json_fname)
+    database, project = read_db_info(json_fname)
 
-    ## Coordinates for raw files
-    #db_raw = op.join('/', 'envau', 'work', 'bagamore', 'brovelli.a', 'Data', 'Neurophy', 'MEG_CausaL')
-    #fname_bti = 'c,rfDC'
-    #fname_config = 'config'
-    #fname_hs = 'hs_file'
-
-    # Coordinates for database
+    # Information on databases
     db_mne = op.join(database, 'db_mne')
     db_bv = op.join(database, 'db_brainvisa')
     db_fs = op.join(database, 'db_freesurfer')
@@ -29,7 +23,7 @@ def read_directories(json_fname='default'):
 
     if json_fname == 'default':
         read_dir = op.join(op.abspath(__package__), 'config')
-        json_fname = op.join(read_dir, 'db_coords.json')
+        json_fname = op.join(read_dir, 'db_info.json')
 
     database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
 
@@ -49,8 +43,9 @@ def create_sbj_db_mne(subject, json_fname='default'):
 
     if json_fname == 'default':
         read_dir = op.join(op.abspath(__package__), 'config')
-        json_fname = op.join(read_dir, 'db_coords.json')
+        json_fname = op.join(read_dir, 'db_info.json')
 
+    print(subject)
     database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
 
     # Create MNE database
@@ -64,8 +59,8 @@ def create_sbj_db_mne(subject, json_fname='default'):
     # Create folders for labels and referentials
     if not op.exists(op.join(db_mne, project, 'label')):
         os.mkdir(op.join(db_mne, project, 'label'))
-    # if not op.exists(op.join(db_mne, project, 'marsatlas')):
-    #     os.mkdir(op.join(db_mne, project, 'marsatlas'))
+    if not op.exists(op.join(db_mne, project, 'marsatlas')):
+        os.mkdir(op.join(db_mne, project, 'marsatlas'))
     if not op.exists(op.join(db_mne, project, 'referential')):
         os.mkdir(op.join(db_mne, project, 'referential'))
 

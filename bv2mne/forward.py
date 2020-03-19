@@ -2,11 +2,9 @@
 #          Ruggero Basanisi <ruggero.basanisi@gmail.com>
 
 import mne
-
 import os
 import os.path as op
-
-from bv2mne.directories import read_databases, read_directories
+from bv2mne.directories import read_directories
 from bv2mne.bem import check_bem, create_bem
 
 def create_forward_models(subject, session=1, event='', src=None, json_fname='default'):
@@ -19,7 +17,7 @@ def create_forward_models(subject, session=1, event='', src=None, json_fname='de
     session : int | str
          Number of the session
     event : str
-        Name of the event of the epoch file
+        Name of the event MEG file
     src : str | None, default None
         Path of the sources file, if None the 'src.fif' file is automatically searched
 
@@ -32,7 +30,7 @@ def create_forward_models(subject, session=1, event='', src=None, json_fname='de
 
     if json_fname == 'default':
         read_dir = op.join(op.abspath(__package__), 'config')
-        json_fname = op.join(read_dir, 'db_coords.json')
+        json_fname = op.join(read_dir, 'db_info.json')
 
     # database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
     raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
@@ -95,8 +93,8 @@ def forward_model(subject, info, fname_trans, src, force_fixed=False, name='mode
     ----------
     subject : str
         The name of subject
-    raw : instance of rawBTI
-        functionnal data
+    info : info from raw MEG file
+        sensor position and data
     fname_trans : str
         The filename of transformation matrix
     src : instance of SourceSpaces | list

@@ -3,7 +3,7 @@ import json
 import os.path as op
 
 
-def setup_db_coords(database_name, project_name, json_path='default', overwrite=True):
+def setup_db_info(database_name, project_name, json_path='default', overwrite=True):
     """ Setup database coordinates for the specific project
 
     Parameters
@@ -44,24 +44,24 @@ def setup_db_coords(database_name, project_name, json_path='default', overwrite=
         save_dir = op.join(op.abspath(__package__), 'config')
     else: save_dir = json_path
 
-    coords = {'db_name': database_name,
-              'p_name': project_name}
+    info = {'db_name': database_name,
+            'p_name': project_name}
 
-    json_fname = op.join(save_dir, 'db_coords.json')
+    json_fname = op.join(save_dir, 'db_info.json')
     if op.exists(json_fname):
         if not overwrite: raise ValueError('Coordinate file exist, to change the values set \'overwrite=True\'')
         else:
             with open(json_fname, 'w') as cf:
-                json.dump(coords, cf)
+                json.dump(info, cf)
     else:
         with open(json_fname, 'w') as cf:
-            json.dump(coords, cf)
+            json.dump(info, cf)
 
-    print('Database coordinates saved in {0}'.format(json_fname))
+    print('Database information saved in {0}'.format(json_fname))
     return json_fname
 
 
-def read_db_coords(json_fname='default'):
+def read_db_info(json_fname='default'):
     """  Read the coordinates of the database and the project
 
     Parameters
@@ -79,16 +79,16 @@ def read_db_coords(json_fname='default'):
 
     if json_fname == 'default':
         read_dir = op.join(op.abspath(__package__), 'config')
-        json_fname = op.join(read_dir, 'db_coords.json')
+        json_fname = op.join(read_dir, 'db_info.json')
 
     if op.exists(json_fname):
-        print('Loading database coordinates...')
+        print('Loading database information...')
         with open(json_fname, 'r') as open_file:
-            coords = json.load(open_file)
-            database = coords['db_name']
-            project = coords['p_name']
+            info = json.load(open_file)
+            database = info['db_name']
+            project = info['p_name']
         return database, project
     else:
-        raise FileExistsError('Database coordinates file do not exist, please set them using '
-                                '\'setup_db_coords()\' function, specifying the folder that '
+        raise FileExistsError('Database info file do not exist, please set them using '
+                                '\'setup_db_info()\' function, specifying the folder that '
                               'contains BrainVISA and FreeSurfer databases, and the project name')

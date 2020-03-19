@@ -13,7 +13,7 @@ def create_main(database, project, subjects, ses, event, json):
 
     for sbj in subjects:
 
-        create_sbj_db_mne (json, sbj)
+        create_sbj_db_mne(json, sbj)
         # Pipeline for the estimation of surfaces/volumes sources and labels
         # ------------------------------------------------------------------------------------------------------------------
         surf_src, surf_labels, vol_src, vol_labels = create_source_models(sbj, save=True)

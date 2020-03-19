@@ -81,7 +81,7 @@ def create_trans(subject, database, fname, fname_out):
 
     else:
         with open(fname_out, 'w') as matfile:
-            # un autre nom semblerait judiceiux pour eviter la confuction
+            # un autre nom semblerait judiceiux pour eviter la confuson
             # avec le matfile de la partie precedente de la fonction
             for i in range(len(trans)):
                 for j in range(len(trans[i])):

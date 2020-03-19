@@ -3,17 +3,13 @@
 
 import os.path as op
 import numpy as np
-
 import mne
 from mne import SourceSpaces
-
 from bv2mne.directories import read_databases, read_directories
-
 from bv2mne.surface import get_surface, get_surface_labels
 from bv2mne.volume import get_volume, get_volume_labels
 from bv2mne.utils import create_trans
 from bv2mne.bem import check_bem, create_bem
-
 
 def create_source_models(subject, save=False, json_fname='default'):
     """ Create cortical and subcortical source models
@@ -48,7 +44,7 @@ def create_source_models(subject, save=False, json_fname='default'):
 
     if json_fname == 'default':
         read_dir = op.join(op.abspath(__package__), 'config')
-        json_fname = op.join(read_dir, 'db_coords.json')
+        json_fname = op.join(read_dir, 'db_info.son')
 
     database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
     raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir = read_directories(json_fname)
@@ -86,15 +82,15 @@ def create_source_models(subject, save=False, json_fname='default'):
     # -------------------------------------------------------------------------
     # Transformation files BV to FS
     # -------------------------------------------------------------------------
-
     # Referential file list
-    # (4 transformation files to transform BV meshes to FS space)
+    # (3 transformation files to transform BV meshes to FS space)
     fname_trans_ref = op.join(db_mne, project, 'referential', 'referential.txt')
 
     # This file contains the transformations for subject_01
     fname_trans_out = op.join(db_mne, project, subject, 'ref', '{0}-trans.trm'.format(subject))
 
     name_lobe_vol = ['Subcortical']
+
     # ---------------------------------------------------------------------
     # Setting up the source space from BrainVISA results
     # ---------------------------------------------------------------------
@@ -105,8 +101,8 @@ def create_source_models(subject, save=False, json_fname='default'):
 
     # Calculate cortical sources and MarsAtlas labels
     print('\n---------- Cortical sources ----------\n')
-    surf_src, surf_labels = get_brain_surf_sources(subject, fname_surf_L, fname_surf_R, fname_tex_L, fname_tex_R, None,
-                                                  fname_trans_out, fname_atlas, fname_color)
+    surf_src, surf_labels = get_brain_surf_sources(subject, fname_surf_L, fname_surf_R, fname_tex_L, fname_tex_R,
+                                                   fname_trans_out, fname_atlas, fname_color)
 
     if save == True:
         print('\nSaving surface source space and labels.....')
@@ -137,7 +133,7 @@ def create_source_models(subject, save=False, json_fname='default'):
 
 
 def get_brain_surf_sources(subject, fname_surf_L=None, fname_surf_R=None,
-                           fname_tex_L=None, fname_tex_R=None, bad_areas=None,
+                           fname_tex_L=None, fname_tex_R=None,
                            trans=False, fname_atlas=None, fname_color=None):
     """compute surface sources
     Parameters
@@ -153,8 +149,6 @@ def get_brain_surf_sources(subject, fname_surf_L=None, fname_surf_R=None,
         The texture is used to select areas in the surface
     fname_tex_R : None | str
         The filename of the texture surface of the left hemisphere
-    bad_areas : list of int
-        Areas that will be excluded from selection
     trans : str | None
         The filename that contains transformation matrix for surface
     fname_atlas : str | None
