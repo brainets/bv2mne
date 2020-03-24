@@ -78,7 +78,7 @@ def create_forward_models(subject, session=1, event='', src=None, json_fname='de
             name = 'vol'
         else: raise ValueError('Unknown Source Space type, it should be \'surf\' or \'vol\'')
 
-        fwd = forward_model(subject, info, fname_trans, sp, force_fixed=f_fixed, name=name, json_fname=json_fname)
+        fwd = forward_model(subject, session, info, fname_trans, sp, force_fixed=f_fixed, name=name, json_fname=json_fname)
         fwds.append(fwd)
 
     print('\n---------- Forward Models Completed ----------\n')
@@ -86,13 +86,15 @@ def create_forward_models(subject, session=1, event='', src=None, json_fname='de
     return fwds
 
 
-def forward_model(subject, info, fname_trans, src, force_fixed=False, name='model', json_fname='default'):
+def forward_model(subject, session, info, fname_trans, src, force_fixed=False, name='model', json_fname='default'):
     """  Compute forward model
 
     Parameters
     ----------
     subject : str
         The name of subject
+    session : str
+        Name of the session of MEG file
     info : info from raw MEG file
         sensor position and data
     fname_trans : str
@@ -121,7 +123,11 @@ def forward_model(subject, info, fname_trans, src, force_fixed=False, name='mode
 
     # Files to save
     fname_bem_sol = op.join(bem_dir.format(subject), '{0}-bem-sol.fif'.format(subject))
-    fname_fwd = op.join(fwd_dir.format(subject), '{0}-{1}-fwd.fif'.format(subject, name))
+    fname_fwd = op.join(fwd_dir.format(subject, session), '{0}-{1}-fwd.fif'.format(subject, name))
+
+    # Create fwd subdirectoties if not existing
+    if not op.exists(fwd_dir.format(subject, session)):
+        os.makedirs(fwd_dir.format(subject, session))
 
     # Making BEM model and BEM solution if it was not done before
     if not check_bem(json_fname, subject):

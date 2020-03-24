@@ -34,7 +34,7 @@ def read_directories(json_fname='default'):
     mri_dir = op.join(db_mne, project, '{0}', 'mri')
     src_dir = op.join(db_mne, project, '{0}', 'src')
     bem_dir = op.join(db_mne, project, '{0}', 'bem')
-    fwd_dir = op.join(db_mne, project, '{0}', 'fwd')
+    fwd_dir = op.join(db_mne, project, '{0}', 'fwd', '{1}')
     hga_dir = op.join(db_mne, project, '{0}', 'hga', '{1}')
 
     return raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir
