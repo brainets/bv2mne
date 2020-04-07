@@ -82,7 +82,6 @@ def read_db_info(json_fname='default'):
         json_fname = op.join(read_dir, 'db_info.json')
 
     if op.exists(json_fname):
-        print('Loading database information...')
         with open(json_fname, 'r') as open_file:
             info = json.load(open_file)
             database = info['db_name']

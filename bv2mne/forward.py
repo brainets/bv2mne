@@ -73,7 +73,7 @@ def create_forward_models(subject, session=1, event='', src=None, json_fname='de
             f_fixed = True
             name = 'surf'
         elif sp[0]['type'] == 'vol':
-            print('\n---------- Forward Model for cortical sources ----------\n')
+            print('\n---------- Forward Model for subcortical sources ----------\n')
             f_fixed = False
             name = 'vol'
         else: raise ValueError('Unknown Source Space type, it should be \'surf\' or \'vol\'')
