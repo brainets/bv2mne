@@ -1,0 +1,7 @@
+README.md
+setup.py
+bv2mne.egg-info/PKG-INFO
+bv2mne.egg-info/SOURCES.txt
+bv2mne.egg-info/dependency_links.txt
+bv2mne.egg-info/requires.txt
+bv2mne.egg-info/top_level.txt
