@@ -139,7 +139,10 @@ def forward_model(subject, session, info, fname_trans, src, force_fixed=False, n
     # Set orientation of cortical sources to surface normals
     if force_fixed:
         # Surface normal
-        fwd = mne.forward.convert_forward_solution(fwd, surf_ori=True, force_fixed=True)
+        fwd = mne.forward.convert_forward_solution(fwd, surf_ori=True)
+    else:
+        # Cartesian 3D
+        fwd = mne.forward.convert_forward_solution(fwd)
 
     # Save fwd model
     mne.write_forward_solution(fname_fwd, fwd, overwrite=True)
