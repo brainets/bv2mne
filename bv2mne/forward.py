@@ -136,7 +136,7 @@ def forward_model(subject, session, info, fname_trans, src, force_fixed=False, n
     # Compute forward, commonly referred to as the gain or leadfield matrix.
     fwd = mne.make_forward_solution(info=info, trans=fname_trans, src=src, bem=fname_bem_sol, mindist=0.0)
 
-    # Set orientation of cortical sources to surface normals
+    # Set orientation of cortical sources to surface normals or 3D for volume
     if force_fixed:
         # Surface normal
         fwd = mne.forward.convert_forward_solution(fwd, surf_ori=True)
