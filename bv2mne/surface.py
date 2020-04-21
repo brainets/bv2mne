@@ -67,6 +67,9 @@ def get_surface(fname, subject, hemi, trans=None):
 
     surface = mne.surface.complete_surface_info(surface)
 
+    # Invert normals since BrainVISA surfaces give in-ward pointing dipoles
+    surface['nn'] *= -1.
+
     return surface
 
 
