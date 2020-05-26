@@ -37,8 +37,9 @@ def read_directories(json_fname='default'):
     bem_dir = op.join(db_mne, project, '{0}', 'bem')
     fwd_dir = op.join(db_mne, project, '{0}', 'fwd', '{1}')
     hga_dir = op.join(db_mne, project, '{0}', 'hga', '{1}')
+    gc_dir = op.join(db_mne, project, '{0}', 'gc', '{1}')
 
-    return raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir
+    return raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir, gc_dir
 
 def create_sbj_db_mne(subject, json_fname='default'):
 
