@@ -16,8 +16,9 @@ def read_databases(json_fname='default'):
     db_mne = op.join(database, 'db_mne')
     db_bv = op.join(database, 'db_brainvisa')
     db_fs = op.join(database, 'db_freesurfer')
+    db_beh = op.join(database, 'db_behaviour')
 
-    return database, project, db_mne, db_bv, db_fs
+    return database, project, db_mne, db_bv, db_fs, db_beh
 
 def read_directories(json_fname='default'):
 
@@ -25,7 +26,7 @@ def read_directories(json_fname='default'):
         read_dir = op.join(op.abspath(__package__), 'config')
         json_fname = op.join(read_dir, 'db_info.json')
 
-    database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
+    database, project, db_mne, db_bv, db_fs, db_beh = read_databases(json_fname)
 
     # mne database subdirectories
     raw_dir = op.join(db_mne, project, '{0}', 'raw', '{1}')
