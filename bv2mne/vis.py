@@ -175,8 +175,7 @@ def visualize_objects(subject, bem, sources, brain, color='marsatlas', json_fnam
 
 if __name__ == '__main__':
     # visualize_cortical_src('subject_02', hemi='both', color='marsatlas', preview=True)
-    json_fname = ""
-    visualize_objects(json_fname, 'subject_18', bem=True, sources=True, brain=True, color='marsatlas')
+    visualize_objects('subject_05', True, True, True, color='marsatlas', json_fname='default')
 
     # src = visualize_cortical_src('subject_02', hemi='both', color='red', preview=False)
     # src.animate()
