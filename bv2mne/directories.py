@@ -16,8 +16,9 @@ def read_databases(json_fname='default'):
     db_mne = op.join(database, 'db_mne')
     db_bv = op.join(database, 'db_brainvisa')
     db_fs = op.join(database, 'db_freesurfer')
+    db_beh = op.join(database, 'db_behaviour')
 
-    return database, project, db_mne, db_bv, db_fs
+    return database, project, db_mne, db_bv, db_fs, db_beh
 
 def read_directories(json_fname='default'):
 
@@ -25,7 +26,7 @@ def read_directories(json_fname='default'):
         read_dir = op.join(op.abspath(__package__), 'config')
         json_fname = op.join(read_dir, 'db_info.json')
 
-    database, project, db_mne, db_bv, db_fs = read_databases(json_fname)
+    database, project, db_mne, db_bv, db_fs, db_beh = read_databases(json_fname)
 
     # mne database subdirectories
     raw_dir = op.join(db_mne, project, '{0}', 'raw', '{1}')
@@ -36,8 +37,10 @@ def read_directories(json_fname='default'):
     bem_dir = op.join(db_mne, project, '{0}', 'bem')
     fwd_dir = op.join(db_mne, project, '{0}', 'fwd', '{1}')
     hga_dir = op.join(db_mne, project, '{0}', 'hga', '{1}')
+    fc_dir = op.join(db_mne, project, '{0}', 'fc', '{1}')
+    gc_dir = op.join(db_mne, project, '{0}', 'gc', '{1}')
 
-    return raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir
+    return raw_dir, prep_dir, trans_dir, mri_dir, src_dir, bem_dir, fwd_dir, hga_dir, fc_dir, gc_dir
 
 def create_sbj_db_mne(subject, json_fname='default'):
 
